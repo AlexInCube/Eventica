@@ -1,2 +1,3 @@
 - [Releases](https://github.com/AlexInCube/Eventica/releases)
 - [Report a bug](https://github.com/AlexInCube/Eventica/issues)
+- [Support us](support)

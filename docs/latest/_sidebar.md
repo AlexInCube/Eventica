@@ -6,14 +6,14 @@
 **Concepts**
 
 - [Events](events)
-- [Namespaces](namespaces)
+- [Namespaces & Wildcard](namespaces-and-wildcard)
 
 ---
 
 **Setting Up**
 
-- [Setting Up](setting-up)
-- [Config & Macros](configuration-and-macros)
+- [Importing Library](importing-library)
+- [Config](config)
 ---
 
 **API**

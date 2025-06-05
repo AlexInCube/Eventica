@@ -1,27 +1,23 @@
 <p align="center"><img src="../logo.png" style="display:block; margin:auto; width:300px"></p>
 <h1 align="center">Eventica</h1>
-<p align="center">Library for event emitting/listening in GameMaker by <a href="" target="_blank">AlexInCube</a></p>
+<p align="center">Library for event handling in GameMaker by <a href="" target="_blank">AlexInCube</a></p>
 <p align="center"><a href="https://github.com/AlexInCube/Eventica/releases/">Download the .yymps</a></p>
 
 &nbsp;
 
-## Features
+## What is this? {docsify-ignore}
 
 Eventica this is a powerful and lightweight library for [event handling.](https://en.wikipedia.org/wiki/Event-driven_programming)
 
-The longer you build your project, the more different systems you make. 
-These systems sometimes want to receive data from each other. 
-You can end up with spaghetti code challenging to change and maintain. 
-Event-driven programming can help you create weakly coupled systems.
+This library is inspired by [EventEmitter2](https://github.com/EventEmitter2/EventEmitter2) package for Node.js
 
-For example, your game is an RPG where you have such systems as quests, achievements, mobs, and inventory.
-You have a quest which requires killing five slimes, you can go directly to the obj_quest_manager and increase its kill count in obj_slime.
-Also need to go achievements manager, for increasing kill count.
-But if we have multiple quests or achievements for same the action? We need to hardcode all this bullshit.
-Or you can emit event about killing mobs and listen to this event from quests and achievements.
-By doing so, we reduce the load on systems and remove spaghetti code.
+## Features {docsify-ignore}
 
-## About & Support
+- [Feather](https://manual.gamemaker.io/monthly/en/index.htm#t=Setting_Up_And_Version_Information%2FIDE_Preferences%2FFeather_Settings.htm) friendly
+- [Namespaces & Wildcards](namespaces-and-wildcard)
+- Subscription methods for any purpose (on, once, many, ...)
+
+## About & Support {docsify-ignore}
 
 Eventica probably supports all Game Maker platforms, but tested only on Windows.
 
@@ -29,6 +25,6 @@ Eventica is built and maintained by [AlexInCube]()
 
 If you have problems or find a bugs, please create an issue.
 
-## License
+## License {docsify-ignore}
 
 Eventica is licensed under the [MIT License](https://github.com/AlexInCube/Eventica/blob/main/LICENSE).

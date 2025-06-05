@@ -1,13 +1,12 @@
 # `EventicaHandler()` ***constructor***
 
-*Constructor returns:* `EventicaHandler` struct
+## .emit
 
-&nbsp;
+`.emit(eventNamespace, [arg1], [arg2], [...])`
 
-The created struct has the following methods (click to expand):
+<!-- tabs:start -->
 
-<details><summary><code>.emit(eventNamespace, [arg1], [arg2], [...])</code></summary>
-&nbsp;
+#### **Description**
 
 **Returns:** N/A (`undefined`)
 
@@ -17,16 +16,20 @@ The created struct has the following methods (click to expand):
 | eventData*     | any      | You can attach multiple data to event |
 
 Subscribe the current object or struct to event and execute function code when event is emitted.
+#### **Example**
 
-*Example:*
 ```gml
 EventicaHandler.emit("mobKill", "slime", gold)
 ```
-&nbsp;
-</details>
+<!-- tabs:end -->
 
-<details><summary><code>.on(eventNamespace, function([...]))</code></summary>
-&nbsp;
+## .on
+
+`.on(eventNamespace, function([...]))`
+
+<!-- tabs:start -->
+
+#### **Description**
 
 **Returns:** N/A (`undefined`)
 
@@ -37,17 +40,23 @@ EventicaHandler.emit("mobKill", "slime", gold)
 
 Subscribe the current object or struct to event and execute function code when event is emitted.
 
-*Example:*
+#### **Example**
+
 ```gml
 EventicaHandler.on("mobKill", function(mobName, goldCount){
     show_debug_message($"You killed {mobName} and gain {goldCount} gold")
 })
 ```
-&nbsp;
-</details>
 
-<details><summary><code>.once(eventNamespace, function([...]))</code></summary>
-&nbsp;
+<!-- tabs:end -->
+
+## .once
+
+`.once(eventNamespace, function([...]))`
+
+<!-- tabs:start -->
+
+#### **Description**
 
 **Returns:** N/A (`undefined`)
 
@@ -58,17 +67,23 @@ EventicaHandler.on("mobKill", function(mobName, goldCount){
 
 The listener is invoked only the first time the event is fired, after which it is unsubscribed.
 
-*Example:*
+#### **Example**
+
 ```gml
 EventicaHandler.once("mobKill", function(mobName, goldCount){
     show_debug_message($"You killed {mobName} and gain {goldCount} gold")
 })
 ```
-&nbsp;
-</details>
 
-<details><summary><code>.many(eventNamespace, timesToListen, function([...]))</code></summary>
-&nbsp;
+<!-- tabs:end -->
+
+## .many
+
+`.many(eventNamespace, timesToListen, function([...]))`
+
+<!-- tabs:start -->
+
+#### **Description**
 
 **Returns:** N/A (`undefined`)
 
@@ -77,17 +92,25 @@ EventicaHandler.once("mobKill", function(mobName, goldCount){
 | eventNamespace | string   | Event you want to subscribe                          |
 | timesToListen  | number   | How many times function need to be executed          |
 | function       | function | Function that will be executed when event is emitted |
- 
+
 The listener is invoked only the first **n** times the event is fired, after which it is removed.
 
-*Example:*
+#### **Example**
+
 ```gml
 EventicaHandler.many("mobKill", 5, function(mobName, goldCount){
     goldEarned += goldCount
 })
 ```
-&nbsp;
-</details>
+
+<!-- tabs:end -->
+
+
+
+
+
+
+
 <details><summary><code>.off()</code></summary></details>
 <details><summary><code>.any(eventNamespace, function(eventNamespace, [...]))</code></summary></details>
 <details><summary><code>.offAny()</code></summary></details>
