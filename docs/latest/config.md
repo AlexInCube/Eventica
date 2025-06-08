@@ -70,4 +70,4 @@ Emit "newListener" event when someone subscribes to handler
 
 *Typical value: `false`*
 
-Emit "removeListener" event when someone subscribes to handler
+Emit "removeListener" event when someone unsubscribes from event

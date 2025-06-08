@@ -1,0 +1,1 @@
+EVENTICA_HANDLER.emit("bruh", "rigachka", "blya", "budu")
