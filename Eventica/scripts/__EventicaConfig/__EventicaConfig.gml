@@ -7,8 +7,11 @@
 /// @desc The delimiter used to segment namespaces
 #macro EVENTICA_DEFAULT_DELIMITER "."
 
+/// @desc Emit “eventAny” event when someone subscribes to handler
+#macro EVENTICA_DEFAULT_EVENT_ANY true
+
 /// @desc Emit “newListener” event when someone subscribes to handler
-#macro EVENTICA_DEFAULT_NEW_LISTENER false
+#macro EVENTICA_DEFAULT_NEW_LISTENER true
 
 /// @desc Emit "removeListener" event when someone unsubscribes from event
 #macro EVENTICA_DEFAULT_REMOVE_LISTENER false

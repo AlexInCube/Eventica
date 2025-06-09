@@ -41,7 +41,45 @@ suite(function() {
                 })    
             })
         })
+        
+        describe(".onAny()", function(){
+            afterEach(function(){
+                EVENTICA_HANDLER.removeAllListeners()
+            })
+        
+            describe("Struct Listener", function(){
+                it("Subscribe", function(){
+                    var structListener = new EventicaMockStructListener()
+                    
+                    with (structListener){
+                        EVENTICA_HANDLER.on("test event newListener", EventicaMockEmptyFunction)
+                        EVENTICA_HANDLER.onAny(structListener.counterUp)
+                    }
+                    
+                    EVENTICA_HANDLER.emit("test event newListener")
+                    EVENTICA_HANDLER.emit("test event newListener")
+                    
+                    expect(structListener.counterGetValue()).toBeEqual(2)
+                })    
+            })
             
+            describe("Instance Listener", function(){
+                it("Subscribe", function(){
+                    var instanceListener = create(0, 0, obj_eventica_mock)
+                    
+                    with (instanceListener){
+                        EVENTICA_HANDLER.on("test event newListener", EventicaMockEmptyFunction)
+                        EVENTICA_HANDLER.onAny(instanceListener.counterUp)
+                    }
+                    
+                    EVENTICA_HANDLER.emit("test event newListener")
+                    EVENTICA_HANDLER.emit("test event newListener")
+                    
+                    expect(instanceListener.counterGetValue()).toBeEqual(2)
+                    instance_destroy(instanceListener)
+                })    
+            })    
+        })
             
         describe(".emit()", function(){
             afterEach(function(){
@@ -63,7 +101,7 @@ suite(function() {
                     EVENTICA_HANDLER.removeAllListeners()
                 })
                 
-               /// TODO: Wait GMTL v1.1 with timers simulation
+                /// TODO: Wait GMTL v1.1 with timers simulation
                 /*
                 it("Auto-unsubscribe if listener is not exists", function(){
                     var structListener = new EventicaMockStructListener()
@@ -86,7 +124,7 @@ suite(function() {
             })
             
             describe("Instance Listener", function(){
-                it("Callback executing", function(){
+                it("Callback Executing", function(){
                     var instanceListener = create(0, 0, obj_eventica_mock)
                     
                     with (instanceListener){
@@ -111,6 +149,98 @@ suite(function() {
                     EVENTICA_HANDLER.emit(".emit() hello instance")
 
                     expect(EVENTICA_HANDLER.__events[$ ".emit() hello instance"]).toBe(undefined)
+                })
+            })
+        })
+        
+        describe(".once()", function(){
+            afterEach(function(){
+                EVENTICA_HANDLER.removeAllListeners()
+            })
+            
+            describe("Struct Listener", function(){
+                it("Callback Executing", function(){
+                    var structListener = new EventicaMockStructListener()
+                    
+                    with (structListener){
+                        EVENTICA_HANDLER.once(".once() hello struct", self.counterUp)
+                    }
+                    
+                    EVENTICA_HANDLER.emit(".once() hello struct")
+                    
+                    expect(structListener.counterGetValue()).toBeEqual(1)
+                    
+                    EVENTICA_HANDLER.emit(".once() hello struct")
+                    
+                    expect(EVENTICA_HANDLER.__events[$ ".emit() hello struct"]).toBe(undefined)
+                })
+            })
+            
+            describe("Instance Listener", function(){
+                it("Callback Executing", function(){
+                    var instanceListener = create(0, 0, obj_eventica_mock)
+                    
+                    with (instanceListener){
+                        EVENTICA_HANDLER.once(".once() hello instance", self.counterUp)
+                    }
+                    
+                    EVENTICA_HANDLER.emit(".once() hello instance")
+                    
+                    expect(instanceListener.counterGetValue()).toBeEqual(1)
+                    
+                    EVENTICA_HANDLER.emit(".once() hello instance")
+                    
+                    expect(EVENTICA_HANDLER.__events[$ ".once() hello struct"]).toBe(undefined)
+                    instance_destroy(instanceListener)
+                })
+            })
+        })
+        
+        describe(".many()", function(){
+            afterEach(function(){
+                EVENTICA_HANDLER.removeAllListeners()
+            })
+            
+            describe("Struct Listener", function(){
+                it("Callback Executing", function(){
+                    var structListener = new EventicaMockStructListener()
+                    
+                    with (structListener){
+                        EVENTICA_HANDLER.many(".many() hello struct", self.counterUp, 3)
+                    }
+                    
+                    EVENTICA_HANDLER.emit(".many() hello struct")
+                    expect(structListener.counterGetValue()).toBeEqual(1)
+                    
+                    EVENTICA_HANDLER.emit(".many() hello struct")
+                    expect(structListener.counterGetValue()).toBeEqual(2)
+                    
+                    EVENTICA_HANDLER.emit(".many() hello struct")
+                    expect(structListener.counterGetValue()).toBeEqual(3)
+                    
+                    expect(EVENTICA_HANDLER.__events[$ ".emit() hello struct"]).toBe(undefined)
+                })
+            })
+            
+            describe("Instance Listener", function(){
+                it("Callback Executing", function(){
+                    var instanceListener = create(0, 0, obj_eventica_mock)
+                    
+                    with (instanceListener){
+                        EVENTICA_HANDLER.many(".many() hello instance", self.counterUp, 3)
+                    }
+                    
+                    EVENTICA_HANDLER.emit(".many() hello instance")
+                    expect(instanceListener.counterGetValue()).toBeEqual(1)
+                    
+                    EVENTICA_HANDLER.emit(".many() hello instance")
+                    expect(instanceListener.counterGetValue()).toBeEqual(2)
+                    
+                    EVENTICA_HANDLER.emit(".many() hello instance")
+                    expect(instanceListener.counterGetValue()).toBeEqual(3)
+                    
+                    expect(EVENTICA_HANDLER.__events[$ ".many() hello instance"]).toBe(undefined)
+                    instance_destroy(instanceListener)
                 })
             })
         })

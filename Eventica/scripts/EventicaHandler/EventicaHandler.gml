@@ -3,9 +3,9 @@ function EventicaHandler() constructor {
     __newListener = EVENTICA_DEFAULT_NEW_LISTENER
     __removeListener = EVENTICA_DEFAULT_REMOVE_LISTENER
     __wildcardEnable = EVENTICA_DEFAULT_ENABLE_WILDCARD
+    __anyEvent = EVENTICA_DEFAULT_EVENT_ANY
     __maxListeners = 10
     
-    //__listeners = {}
     __events = {}
     
     /// @param {string} _namespace Event you want to emit
@@ -56,12 +56,17 @@ function EventicaHandler() constructor {
         __RemoveListener(other, _namespace)
     }
     
-    static onAny = function(){
-        show_debug_message("not implemented")
+    /// @desc Subscribe the current object or struct to event.
+    /// @param {function} _callback Function that will be executed when event is emitted
+    /// @return {any} Returns listener
+    static onAny = function(_callback){
+        return __AddListener(other, __EVENTICA_EVENT_ANY, _callback)
     }
     
-    static offAny = function(){
-        show_debug_message("not implemented")
+    /// @desc Unsubscribe the current object or struct to event from listening the event
+    /// @param {string} _namespace
+    static offAny = function(_namespace){
+        __RemoveListener(other, __EVENTICA_EVENT_ANY)
     }
     
     /// @desc Remove all listeners if _namespace is not provided or remove all namespace listeners
@@ -150,31 +155,41 @@ function EventicaHandler() constructor {
     static __EmitEvent = function(_namespace, _args = []){
         var _event = __events[$ _namespace]
         if (is_undefined(_event)) exit
+        if (__anyEvent && _namespace != __EVENTICA_EVENT_ANY) __EmitEvent(__EVENTICA_EVENT_ANY, [_namespace, _args])
         
         var _i = 0; repeat(array_length(_event)) {
             var _listener = _event[_i]
-            var ref_is_alive = false
+            var _auto_unsubscribe = true
+            var _scope = undefined;
+            
+            if (is_struct(_listener.scope)) {
+                if (weak_ref_alive(_listener.scope)) {
+                    _auto_unsubscribe = false
+                    
+                    _scope = _listener.scope.ref
+                }
+            } else if (instance_exists(_listener.scope)) {
+                _auto_unsubscribe = false
+                
+                _scope = _listener.scope
+            }
 
-            if (weak_ref_alive(_listener.scope)){
-                ref_is_alive = true
-                
-                with (_listener.scope.ref) {
+            if (!is_undefined(_scope)){
+                with (_scope) {
                     script_execute_ext(_listener.callback, _args)
                 }
                 
-                continue
-            }
-            
-            if (instance_exists(_listener.scope)){
-                ref_is_alive = true
-                
-                with (_listener.scope) {
-                    script_execute_ext(_listener.callback, _args)
+                if (_listener.repetitions >= 0) {
+                    _listener.repetitions--
+                    
+                    if (_listener.repetitions == 0){
+                        _auto_unsubscribe = true
+                    }
                 }
             }
-            
-            // If listener struct or instance is not exists, delete listener
-            if (!ref_is_alive) {
+           
+            // If listener struct or instance is not exists or repetitions is zero then delete listener
+            if (_auto_unsubscribe) {
                 array_delete(__events[$ _namespace], _i, 1)
                 
                 // If we don`t have any listener on event, remove event
