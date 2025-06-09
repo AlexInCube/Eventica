@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Mocks",
+  "%Name":"EventicaMockEmptyFunction",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Mocks",
+  "name":"EventicaMockEmptyFunction",
   "parent":{
     "name":"Eventica Test Suits",
     "path":"folders/Eventica Test Suits.yy",

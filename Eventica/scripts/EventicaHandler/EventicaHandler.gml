@@ -13,8 +13,6 @@ function EventicaHandler() constructor {
     static emit = function(_namespace, _args = undefined){
         // Wrap args into executable form for script_execute_ext()
         if (!is_undefined(_args)){
-            var _args_array = []
-           
             var _i = 1; repeat(argument_count - 1)
             {
                 array_push(_args_array, argument[_i]) 
@@ -64,8 +62,13 @@ function EventicaHandler() constructor {
         show_debug_message("not implemented")
     }
     
-    static removeAllListeners = function(){
-        show_debug_message("not implemented")
+    /// @desc Remove all listeners if _namespace is not provided or remove all namespace listeners
+    /// @param {string} _namespace Event you want to subscribe
+    static removeAllListeners = function(_namespace = undefined){
+        if (is_undefined(_namespace)){
+            delete __events
+            __events = {}
+        }
     }
     
     static setMaxListeners = function(){
@@ -84,6 +87,11 @@ function EventicaHandler() constructor {
     static __AddListener = function(_scope, _namespace, _callback, _repetitions = -1){
         if (!is_struct(_scope) && !instance_exists(_scope)) {
             __EventicaError("Listener must be instance or struct")
+            exit
+        }
+        
+        if (!is_callable(_callback)){
+            __EventicaError("Listener callback must be method or function")
             exit
         }
         
@@ -111,7 +119,7 @@ function EventicaHandler() constructor {
     
     /// @param {string} _namespace
     /// @param {Array.Any} _args
-    static __EmitEvent = function(_namespace, _args){
+    static __EmitEvent = function(_namespace, _args = []){
         var _event = __events[$ _namespace]
         if (is_undefined(_event)) exit
         
