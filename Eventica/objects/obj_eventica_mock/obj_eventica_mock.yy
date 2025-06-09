@@ -8,8 +8,8 @@
   "name":"obj_eventica_mock",
   "overriddenProperties":[],
   "parent":{
-    "name":"Eventica Test Suits",
-    "path":"folders/Eventica Test Suits.yy",
+    "name":"Mocks",
+    "path":"folders/Eventica Tests/Mocks.yy",
   },
   "parentObjectId":null,
   "persistent":false,

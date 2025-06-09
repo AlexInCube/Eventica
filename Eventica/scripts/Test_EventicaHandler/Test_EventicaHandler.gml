@@ -44,6 +44,10 @@ suite(function() {
             
             
         describe(".emit()", function(){
+            afterEach(function(){
+                EVENTICA_HANDLER.removeAllListeners()
+            })
+            
             describe("Struct Listener", function(){
                 it("Callback Executing", function(){
                     var structListener = new EventicaMockStructListener()
@@ -106,11 +110,48 @@ suite(function() {
                     
                     EVENTICA_HANDLER.emit(".emit() hello instance")
 
-                    expect(EVENTICA_HANDLER.__events[$ ".emit() hello instance"]).never().toHaveReturned()
+                    expect(EVENTICA_HANDLER.__events[$ ".emit() hello instance"]).toBe(undefined)
+                })
+            })
+        })
+        
+        describe(".off()", function(){
+            afterEach(function(){
+                EVENTICA_HANDLER.removeAllListeners()
+            })
+            
+            describe("Struct Listener", function(){
+                it("Unsubcribing", function(){
+                    var structListener = new EventicaMockStructListener()
+                    
+                    with (structListener){
+                        EVENTICA_HANDLER.on(".off() hello struct", self.counterUp)
+                    }
+                    
+                    with (structListener){
+                        EVENTICA_HANDLER.off(".off() hello struct")
+                    }
+                    
+                    expect(EVENTICA_HANDLER.__events[$ ".off() hello struct"]).toBe(undefined)    
                 })
             })
             
-            
+            describe("Instance Listener", function(){
+                it("Unsubcribing", function(){
+                    var instanceListener = create(0, 0, obj_eventica_mock)
+                    
+                    with (instanceListener){
+                        EVENTICA_HANDLER.on(".off() hello instance", self.counterUp)
+                    }
+                    
+                    with (instanceListener){
+                        EVENTICA_HANDLER.off(".off() hello instance")
+                    }
+                    
+                    expect(EVENTICA_HANDLER.__events[$ ".off() hello instance"]).toBe(undefined)   
+                    instance_destroy(instanceListener)
+                })
+            })
         })
     })
 });

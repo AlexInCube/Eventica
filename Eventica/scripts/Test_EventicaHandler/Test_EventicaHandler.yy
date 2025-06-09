@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"Test_EventicaHandler",
   "parent":{
-    "name":"Eventica Test Suits",
-    "path":"folders/Eventica Test Suits.yy",
+    "name":"Eventica Tests",
+    "path":"folders/Eventica Tests.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

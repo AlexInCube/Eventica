@@ -50,8 +50,10 @@ function EventicaHandler() constructor {
         return __AddListener(other, _namespace, _callback, _n)
     }
     
-    static off = function(){
-        show_debug_message("not implemented")
+    /// @desc Unsubscribe the current object or struct to event from listening the event
+    /// @param {string} _namespace
+    static off = function(_namespace){
+        __RemoveListener(other, _namespace)
     }
     
     static onAny = function(){
@@ -86,7 +88,7 @@ function EventicaHandler() constructor {
     /// @return {any} Returns listener
     static __AddListener = function(_scope, _namespace, _callback, _repetitions = -1){
         if (!is_struct(_scope) && !instance_exists(_scope)) {
-            __EventicaError("Listener must be instance or struct")
+            __EventicaError("Listener must be alive instance or struct")
             exit
         }
         
@@ -108,13 +110,39 @@ function EventicaHandler() constructor {
         return _scope
     }
     
-    static __RemoveListener = function(_scope){
-        if (!is_struct(_scope) && !instance_exists(_scope)) {
-            __EventicaError("Listener must be instance or struct")
+    /// @param {Id.Instance|Struct} _scope
+    /// @param {string} _namespace
+    static __RemoveListener = function(_scope, _namespace){
+        var _event = __events[$ _namespace]
+        if (is_undefined(_event)) exit
+        
+        if (is_struct(_scope)){ // If we have struct listener
+            var _i = 0; repeat(array_length(_event)) {
+                if (_event[_i].scope.ref == _scope){
+                    array_delete(_event, _i, 1)
+                    break
+                }
+                
+                _i++
+            }
+        } else if (instance_exists(_scope)){ // If we have instance listener
+            var _i = 0; repeat(array_length(_event)) {
+                if (_event[_i].scope.id == _scope.id){
+                    array_delete(_event, _i, 1)
+                    break
+                }
+                
+                _i++
+            }
+        } else {
+            __EventicaError("Listener must be alive instance or struct")
             exit
         }
         
-        
+        // If we don`t have any listener on event, remove event
+        if (array_length(__events[$ _namespace]) == 0){
+            struct_remove(__events, _namespace)
+        }
     }
     
     /// @param {string} _namespace
@@ -149,7 +177,8 @@ function EventicaHandler() constructor {
             if (!ref_is_alive) {
                 array_delete(__events[$ _namespace], _i, 1)
                 
-                if (array_length(__events[$ _namespace]) == 0){
+                // If we don`t have any listener on event, remove event
+                if (array_length(_event) == 0){
                     struct_remove(__events, _namespace)
                 }
                 

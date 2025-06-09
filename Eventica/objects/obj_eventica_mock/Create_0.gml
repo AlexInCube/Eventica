@@ -1,5 +1,5 @@
 __counter = 0
-name = "i am struct listener"
+name = "i am instance listener"
 
 counterUp = function(){
     __counter++
