@@ -31,6 +31,7 @@
     {"id":{"name":"obj_debug","path":"objects/obj_debug/obj_debug.yy",},},
     {"id":{"name":"obj_event_emitter","path":"objects/obj_event_emitter/obj_event_emitter.yy",},},
     {"id":{"name":"obj_event_listener","path":"objects/obj_event_listener/obj_event_listener.yy",},},
+    {"id":{"name":"obj_eventica_controller","path":"objects/obj_eventica_controller/obj_eventica_controller.yy",},},
     {"id":{"name":"obj_eventica_mock","path":"objects/obj_eventica_mock/obj_eventica_mock.yy",},},
     {"id":{"name":"rm_example","path":"rooms/rm_example/rm_example.yy",},},
     {"id":{"name":"__Eventica","path":"scripts/__Eventica/__Eventica.yy",},},

@@ -13,9 +13,13 @@ This library is inspired by [EventEmitter2](https://github.com/EventEmitter2/Eve
 
 ## Features {docsify-ignore}
 
-- [Feather](https://manual.gamemaker.io/monthly/en/index.htm#t=Setting_Up_And_Version_Information%2FIDE_Preferences%2FFeather_Settings.htm) friendly
+- Subscription methods for any purpose (.on(), .once(), .many(), ...)
+- Structs & Instances as listeners
+- Auto-memory management, you don't need to unsubscribe from events manually (but you can do it with .off())
+- Prefab support
 - [Namespaces & Wildcards](namespaces-and-wildcard)
-- Subscription methods for any purpose (on, once, many, ...)
+- [Feather](https://manual.gamemaker.io/monthly/en/index.htm#t=Setting_Up_And_Version_Information%2FIDE_Preferences%2FFeather_Settings.htm) friendly
+- [GMTL Tests](https://github.com/DAndrewBox/GM-Testing-Library)
 
 ## About & Support {docsify-ignore}
 

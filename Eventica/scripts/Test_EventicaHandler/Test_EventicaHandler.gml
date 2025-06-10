@@ -41,45 +41,6 @@ suite(function() {
                 })    
             })
         })
-        
-        describe(".onAny()", function(){
-            afterEach(function(){
-                EVENTICA_HANDLER.removeAllListeners()
-            })
-        
-            describe("Struct Listener", function(){
-                it("Subscribe", function(){
-                    var structListener = new EventicaMockStructListener()
-                    
-                    with (structListener){
-                        EVENTICA_HANDLER.on("test event newListener", EventicaMockEmptyFunction)
-                        EVENTICA_HANDLER.onAny(structListener.counterUp)
-                    }
-                    
-                    EVENTICA_HANDLER.emit("test event newListener")
-                    EVENTICA_HANDLER.emit("test event newListener")
-                    
-                    expect(structListener.counterGetValue()).toBeEqual(2)
-                })    
-            })
-            
-            describe("Instance Listener", function(){
-                it("Subscribe", function(){
-                    var instanceListener = create(0, 0, obj_eventica_mock)
-                    
-                    with (instanceListener){
-                        EVENTICA_HANDLER.on("test event newListener", EventicaMockEmptyFunction)
-                        EVENTICA_HANDLER.onAny(instanceListener.counterUp)
-                    }
-                    
-                    EVENTICA_HANDLER.emit("test event newListener")
-                    EVENTICA_HANDLER.emit("test event newListener")
-                    
-                    expect(instanceListener.counterGetValue()).toBeEqual(2)
-                    instance_destroy(instanceListener)
-                })    
-            })    
-        })
             
         describe(".emit()", function(){
             afterEach(function(){
@@ -283,5 +244,126 @@ suite(function() {
                 })
             })
         })
+        
+        describe("Internal Events", function(){
+            describe(__EVENTICA_EVENT_ADD_LISTENER, function(){ 
+                afterEach(function(){
+                    EVENTICA_HANDLER.removeAllListeners()
+                })
+                
+                it("Instance Listener", function(){
+                    var instanceListener = create(0, 0, obj_eventica_mock)
+                    
+                    with (instanceListener){
+                        EVENTICA_HANDLER.on(__EVENTICA_EVENT_ADD_LISTENER, self.counterUp)
+                        EVENTICA_HANDLER.on("test event addListener", self.counterUp)
+                    }
+                    
+                    EVENTICA_HANDLER.emit("test event addListener")
+                    EVENTICA_HANDLER.emit("test event addListener")
+                    
+                    expect(instanceListener.counterGetValue()).toBeEqual(4)
+                    instance_destroy(instanceListener)
+                })    
+   
+                it("Struct Listener", function(){
+                    var structListener = new EventicaMockStructListener()
+                    
+                    with (structListener){
+                        EVENTICA_HANDLER.on(__EVENTICA_EVENT_ADD_LISTENER, self.counterUp)
+                        EVENTICA_HANDLER.on("test event addListener", self.counterUp)
+                    }
+                    
+                    EVENTICA_HANDLER.emit("test event addListener")
+                    EVENTICA_HANDLER.emit("test event addListener")
+                    
+                    expect(structListener.counterGetValue()).toBeEqual(4)
+                })    
+            })
+            
+            describe(__EVENTICA_EVENT_REMOVE_LISTENER, function(){ 
+                afterEach(function(){
+                    EVENTICA_HANDLER.removeAllListeners()
+                })
+                
+                it("Instance Listener", function(){
+                    var instanceListener = create(0, 0, obj_eventica_mock)
+                    
+                    with (instanceListener){
+                        EVENTICA_HANDLER.on(__EVENTICA_EVENT_REMOVE_LISTENER, self.counterUp)
+                        EVENTICA_HANDLER.on("test event removeListener", EventicaMockEmptyFunction)
+                        
+                        EVENTICA_HANDLER.off("test event removeListener")
+                    }
+                    
+                    expect(instanceListener.counterGetValue()).toBeEqual(1)
+                    instance_destroy(instanceListener)
+                })
+   
+                it("Struct Listener", function(){
+                    var structListener = new EventicaMockStructListener()
+          
+                    with (structListener){
+                        EVENTICA_HANDLER.on(__EVENTICA_EVENT_REMOVE_LISTENER, self.counterUp)
+                        EVENTICA_HANDLER.on("test event removeListener", EventicaMockEmptyFunction)
+                        
+                        EVENTICA_HANDLER.off("test event removeListener")
+                    }
+                    
+                    expect(structListener.counterGetValue()).toBeEqual(1)
+                })    
+            })
+            
+            describe(__EVENTICA_EVENT_ANY, function(){ 
+                afterEach(function(){
+                    EVENTICA_HANDLER.removeAllListeners()
+                })
+                
+                it("Instance Listener", function(){
+                    var instanceListener = create(0, 0, obj_eventica_mock)
+                    
+                    with (instanceListener){
+                        EVENTICA_HANDLER.on(__EVENTICA_EVENT_ANY, self.counterUp)
+                        EVENTICA_HANDLER.on("test event any", self.counterUp)
+                    }
+                    
+                    EVENTICA_HANDLER.emit("test event any")
+                    
+                    expect(instanceListener.counterGetValue()).toBeEqual(2)
+                    instance_destroy(instanceListener)
+                })
+   
+                it("Struct Listener", function(){
+                    var structListener = new EventicaMockStructListener()
+          
+                    with (structListener){
+                        EVENTICA_HANDLER.on(__EVENTICA_EVENT_ANY, self.counterUp)
+                        EVENTICA_HANDLER.on("test event any", self.counterUp)
+                    }
+                    
+                    EVENTICA_HANDLER.emit("test event any")
+                    
+                    expect(structListener.counterGetValue()).toBeEqual(2)
+                })    
+            })
+        })
+        
+        // TODO: Figure out how to test exceptions
+        /*
+        describe("Max Listeners", function(){
+            it("Listeners", function(){
+                var count = 1
+                
+                repeat (11) {
+                	var structListener = new EventicaMockStructListener()
+                    EVENTICA_HANDLER.on("test event any", EventicaMockEmptyFunction)
+                }
+                
+                expect(count).toBeEqual(1)
+                
+                EVENTICA_HANDLER.removeAllListeners()
+            })
+        })
+         */
     })
 });

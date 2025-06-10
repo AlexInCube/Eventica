@@ -1,9 +1,12 @@
 // Feather disable all
 
-#macro __EVENTICA_VERSION      "0.1.0"
-#macro __EVENTICA_DATE         "2025-06-06"
-#macro __EVENTICA_DEBUG        true
-#macro __EVENTICA_EVENT_ANY    "__EventicaAny"
+#macro __EVENTICA_VERSION                  "0.1.0"
+#macro __EVENTICA_DATE                     "2025-06-06"
+
+#macro __EVENTICA_DEBUG                    true
+#macro __EVENTICA_EVENT_ANY                "__EventicaAny"
+#macro __EVENTICA_EVENT_REMOVE_LISTENER    "__EventicaRemoveListener"
+#macro __EVENTICA_EVENT_ADD_LISTENER       "__EventicaAddListener"
 
 /// @desc Can be undefined if EVENTICA_ENABLE_DEFAULT_HANDLER set to false
 #macro EVENTICA_HANDLER __Eventica()
