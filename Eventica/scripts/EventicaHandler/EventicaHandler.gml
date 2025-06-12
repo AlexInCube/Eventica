@@ -95,10 +95,11 @@ function EventicaHandler() constructor {
         var _namespace_parts = string_split(_namespace, option_namespace_delimiter)
         
         var _current_pointer = __events
+        var _current_namespace_part = undefined
         
         // We need to find array of listeners or create array if not exists
         var i = 0; var _namespace_parts_len = array_length(_namespace_parts); repeat(_namespace_parts_len) {
-            var _current_namespace_part = _namespace_parts[i]
+            _current_namespace_part = _namespace_parts[i]
             
             if (!variable_struct_exists(_current_pointer, _current_namespace_part)){
                 _current_pointer[$ _current_namespace_part] = {}
@@ -106,7 +107,7 @@ function EventicaHandler() constructor {
             
             if (i == _namespace_parts_len - 1){
                 _current_pointer[$ _current_namespace_part] = []
-                _current_pointer = _current_pointer[$ _current_namespace_part]
+                //_current_pointer = _current_pointer[$ _current_namespace_part]
                 break
             }
             
@@ -116,7 +117,19 @@ function EventicaHandler() constructor {
         }
         
         // _current_pointer at this point always must be array
-        array_push(_current_pointer, new __EventicaListener(_scope, _callback, _repetitions))
+        array_push(_current_pointer[$ _current_namespace_part], new __EventicaListener(_scope, _callback, _repetitions))
+        
+        if (option_wildcard_enable) {
+            if (_namespace_parts_len > 1){
+                if (is_struct(_current_pointer)){
+                    if (is_undefined(_current_pointer[$ "*"])){
+                        _current_pointer[$ "*"] = []
+                    }
+                    
+                    array_push(_current_pointer[$ "*"], new __EventicaListener(_scope, _callback, _repetitions))
+                }
+            }
+        }
         
         if (maxListeners != -1 && array_length(__events[$ _namespace_parts[i]]) > maxListeners) __EventicaError($"Max listeners for event \"{_namespace}\" is exceed {maxListeners} listeners, propably you have memory leak?")
         

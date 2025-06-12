@@ -39,6 +39,19 @@ suite(function() {
                     expect(event).toHaveProperty("scope")
                     expect(event.scope.ref).toBeEqual(structListener)
                 })    
+                
+                it("Wildcard Subscribe", function(){
+                    var _structListener = new EventicaMockStructListener()
+                    
+                    with (_structListener){
+                        EVENTICA_HANDLER.on("on().hello.struct", EventicaMockEmptyFunction)
+                    }
+                    
+                    var _namespace = EVENTICA_HANDLER.__events[$ "on()"][$ "hello"]
+                    
+                    expect(_namespace).toHaveProperty("*")
+                    expect(_namespace[$ "*"][0].scope.ref).toBeEqual(_structListener)
+                })    
             })
             
             describe("Instance Listener", function(){
