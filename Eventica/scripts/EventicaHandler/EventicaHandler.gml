@@ -1,11 +1,5 @@
 /// @desc Core of the Eventica
 function EventicaHandler() constructor {
-    /// @desc The delimiter used to segment namespaces
-    option_namespace_delimiter = "."
-    
-    /// @desc Enable or disable using of * in event listeners
-    option_wildcard_enable = true
-    
     /// @desc Emit “addListener” event when someone subscribes to handler
     option_event_add_listener = true
     
@@ -15,6 +9,12 @@ function EventicaHandler() constructor {
     /// @desc Set to -1 for infinite count of listeners. 
     /// When count of listeners for one event is exceed maxListeners, the warning are printed in console.
     maxListeners = 10
+    
+    /// @desc The delimiter used to segment namespaces
+    option_namespace_delimiter = "."
+    
+    /// @desc Enable or disable using of * in event listeners.
+    option_wildcard_enable = true
     
     /// @desc Dont touch it!!!
     __events = {}
@@ -76,14 +76,6 @@ function EventicaHandler() constructor {
         }
     }
     
-    static setMaxListeners = function(){
-        show_debug_message("not implemented")
-    }
-    
-    static getMaxListeners = function(){
-        show_debug_message("not implemented")
-    }
-    
     /// @param {Id.Instance|Struct} _scope
     /// @param {string} _namespace
     /// @param {function} _callback
@@ -100,20 +92,33 @@ function EventicaHandler() constructor {
             exit
         }
         
-        var _event = __events[$ _namespace]
+        var _namespace_parts = string_split(_namespace, option_namespace_delimiter)
         
-        if (!is_array(_event)){
-            _event = []
-            __events[$ _namespace] = _event
+        var _current_pointer = __events
+        
+        // We need to find array of listeners or create array if not exists
+        var i = 0; var _namespace_parts_len = array_length(_namespace_parts); repeat(_namespace_parts_len) {
+            var _current_namespace_part = _namespace_parts[i]
+            
+            if (!variable_struct_exists(_current_pointer, _current_namespace_part)){
+                _current_pointer[$ _current_namespace_part] = {}
+            }
+            
+            if (i == _namespace_parts_len - 1){
+                _current_pointer[$ _current_namespace_part] = []
+                _current_pointer = _current_pointer[$ _current_namespace_part]
+                break
+            }
+            
+            _current_pointer = _current_pointer[$ _current_namespace_part]
+
+            i++
         }
         
-        array_push(_event, {
-            scope: is_struct(_scope) ? weak_ref_create(_scope) : _scope.id,
-            callback: _callback,
-            repetitions: _repetitions
-        })
+        // _current_pointer at this point always must be array
+        array_push(_current_pointer, new __EventicaListener(_scope, _callback, _repetitions))
         
-        if (maxListeners != -1 && array_length(_event) > maxListeners) __EventicaError($"Max listeners for event \"{_namespace}\" is exceed {maxListeners} listeners, propably you have memory leak?")
+        if (maxListeners != -1 && array_length(__events[$ _namespace_parts[i]]) > maxListeners) __EventicaError($"Max listeners for event \"{_namespace}\" is exceed {maxListeners} listeners, propably you have memory leak?")
         
         if (option_event_add_listener) __EmitEvent(__EVENTICA_EVENT_ADD_LISTENER, [_scope, _namespace])
 
@@ -123,23 +128,23 @@ function EventicaHandler() constructor {
     /// @param {Id.Instance|Struct} _scope
     /// @param {string} _namespace
     static __RemoveListener = function(_scope, _namespace){
-        var _event = __events[$ _namespace]
-        if (is_undefined(_event)) exit 
+        var _listeners = __FindListenersArray(_namespace)
+        if (is_undefined(_listeners)) exit 
         if (option_event_remove_listener) __EmitEvent(__EVENTICA_EVENT_REMOVE_LISTENER, [_scope, _namespace])
 
         if (is_struct(_scope)){ // If we have struct listener
-            var _i = 0; repeat(array_length(_event)) {
-                if (_event[_i].scope.ref == _scope){
-                    array_delete(_event, _i, 1)
+            var _i = 0; repeat(array_length(_listeners)) {
+                if (_listeners[_i].scope.ref == _scope){
+                    array_delete(_listeners, _i, 1)
                     break
                 }
                 
                 _i++
             }
         } else if (instance_exists(_scope)){ // If we have instance listener
-            var _i = 0; repeat(array_length(_event)) {
-                if (_event[_i].scope.id == _scope.id){
-                    array_delete(_event, _i, 1)
+            var _i = 0; repeat(array_length(_listeners)) {
+                if (_listeners[_i].scope.id == _scope.id){
+                    array_delete(_listeners, _i, 1)
                     break
                 }
                 
@@ -151,20 +156,18 @@ function EventicaHandler() constructor {
         }
         
         // If we don`t have any listener on event, remove event
-        if (array_length(__events[$ _namespace]) == 0){
-            struct_remove(__events, _namespace)
-        }
+        __RemoveNamespaceIfEmpty(_namespace)
     }
     
     /// @param {string} _namespace
     /// @param {Array.Any} _args
     static __EmitEvent = function(_namespace, _args = []){
-        var _event = __events[$ _namespace]
-        if (is_undefined(_event)) exit 
+        var _listeners = __FindListenersArray(_namespace)
+        if (is_undefined(_listeners)) exit 
         if (_namespace != __EVENTICA_EVENT_ANY) __EmitEvent(__EVENTICA_EVENT_ANY, [_namespace, _args])
         
-        var _i = 0; repeat(array_length(_event)) {
-            var _listener = _event[_i]
+        var _i = 0; repeat(array_length(_listeners)) {
+            var _listener = _listeners[_i]
             // We must prove, the listener are still exists
             var _auto_unsubscribe = true
             var _scope = undefined;
@@ -201,14 +204,77 @@ function EventicaHandler() constructor {
                 array_delete(__events[$ _namespace], _i, 1)
                 
                 // If we don`t have any listener on event, remove event
-                if (array_length(_event) == 0){
-                    struct_remove(__events, _namespace)
-                }
+                __RemoveNamespaceIfEmpty(_namespace)
                 
                 _i--
             }
             
             _i++
+        }
+    }
+    
+    /// @param {string} _namespace
+    /// @return {Array.__EventicaListener|undefined}
+    static __FindListenersArray = function(_namespace){
+        var _namespace_parts = string_split(_namespace, option_namespace_delimiter);
+        
+        var _current = __events // just pointer
+        
+        var i = 0; repeat (array_length(_namespace_parts)) {
+        	var _key = _namespace_parts[i]
+            
+            if (!variable_struct_exists(_current, _key)){
+                return undefined
+            }
+            
+            _current = _current[$ _key]
+            
+            i++
+        }
+        
+        return _current
+    }
+    
+    /// @param {string} _namespace
+    static __RemoveNamespaceIfEmpty = function(_namespace){
+        var _namespace_parts = string_split(_namespace, option_namespace_delimiter);
+        
+        var _namespace_pointer = __events // just pointer
+        
+        var _delete_stack = [];
+        
+        // Collect path for possible deletion
+        var i = 0; repeat (array_length(_namespace_parts)) {
+            var _key = _namespace_parts[i]
+            
+            if (!variable_struct_exists(_namespace_pointer, _key)){
+                return;
+            }
+            
+            array_push(_delete_stack, [_key, _namespace_pointer]) // Add field name of namespace struct and pointer to that struct
+            _namespace_pointer = _namespace_pointer[$ _key]
+            
+            i++
+        }
+        
+        // Delete empty structs
+        while(array_length(_delete_stack) > 0){
+            var _entry = array_pop(_delete_stack)
+            var _key = _entry[0]
+            var _pointer = _entry[1]
+            
+            if (is_struct(_pointer[$ _key])) {
+                var _struct = _pointer[$ _key]
+                if (struct_names_count(_struct) == 0){
+                    struct_remove(_pointer, _key)
+                }
+            }
+            
+            if (is_array(_pointer[$ _key])) {
+                if (array_length(_pointer[$ _key]) == 0){
+                    struct_remove(_pointer, _key)
+                }
+            }
         }
     }
     

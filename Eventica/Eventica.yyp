@@ -37,6 +37,7 @@
     {"id":{"name":"__Eventica","path":"scripts/__Eventica/__Eventica.yy",},},
     {"id":{"name":"__EventicaConfig","path":"scripts/__EventicaConfig/__EventicaConfig.yy",},},
     {"id":{"name":"__EventicaError","path":"scripts/__EventicaError/__EventicaError.yy",},},
+    {"id":{"name":"__EventicaListener","path":"scripts/__EventicaListener/__EventicaListener.yy",},},
     {"id":{"name":"__EventicaTrace","path":"scripts/__EventicaTrace/__EventicaTrace.yy",},},
     {"id":{"name":"EventicaHandler","path":"scripts/EventicaHandler/EventicaHandler.yy",},},
     {"id":{"name":"EventicaMockEmptyFunction","path":"scripts/EventicaMockEmptyFunction/EventicaMockEmptyFunction.yy",},},
