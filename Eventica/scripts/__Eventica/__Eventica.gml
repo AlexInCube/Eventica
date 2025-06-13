@@ -27,7 +27,7 @@ function __Eventica() {
         _defaultHandler = new EventicaHandler()
         return _defaultHandler 
     } else {
-        show_debug_message("EVENTICA_HANDLER is disabled by macro EVENTICA_ENABLE_DEFAULT_HANDLER")  
+        show_debug_message("EVENTICA_HANDLER is disabled by macro EVENTICA_ENABLE_DEFAULT_HANDLER, you can change it in __EventicaConfig")  
         return undefined
     }
 }

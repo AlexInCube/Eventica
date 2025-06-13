@@ -13,9 +13,8 @@ function EventicaHandler() constructor {
     /// When count of listeners for one event is exceed maxListeners, the warning are printed in console.
     maxListeners = 10
     
-    /// @desc Dont touch it!!!
     __events = {}
-    
+
     /// @param {string} _event Event you want to emit
     /// @param {any} _args There can be a multiple args like: emit(value1, value2, value3, ...)
     static emit = function(_event, _args = undefined){
@@ -64,21 +63,15 @@ function EventicaHandler() constructor {
         __RemoveListener(other, _event)
     }
     
-    /// @desc Remove all listeners if _event is not provided or remove all namespace listeners
+    /// @desc Remove all listeners if _event is not provided or remove all _event listeners
     /// @param {string} _event Event you want to subscribe
     static removeAllListeners = function(_event = undefined){
         if (is_undefined(_event)){
             delete __events
             __events = {}
+        } else {
+            struct_remove(__events, _event)
         }
-    }
-    
-    static setMaxListeners = function(){
-        show_debug_message("not implemented")
-    }
-    
-    static getMaxListeners = function(){
-        show_debug_message("not implemented")
     }
     
     /// @param {Id.Instance|Struct} _scope
@@ -177,6 +170,17 @@ function EventicaHandler() constructor {
             
             _i++
         }
+    }
+    
+    __garbage_collector_timer = time_source_create(time_source_global, 10, time_source_units_seconds, method(self, function(){ self.__GarbageCollect(); show_debug_message("Eventica Collector Tick") }), [], -1)
+    time_source_start(__garbage_collector_timer)
+    
+    static GarbageCollectDisable = function(){
+        time_source_pause(__garbage_collector_timer)
+    }
+    
+    static GarbageCollectEnable = function(){
+        time_source_resume(__garbage_collector_timer)
     }
     
     static __GarbageCollect = function(){
