@@ -365,5 +365,27 @@ suite(function() {
             })
         })
          */
+        
+        describe("Garbage Collecting", function(){
+            afterEach(function(){
+                EVENTICA_HANDLER.removeAllListeners()
+            })
+            
+            describe("Instance Listeners", function(){
+                it("instance_destroy() and forget to .off() listener", function(){
+                    var instanceListener = create(0, 0, obj_eventica_mock)
+                    
+                    with (instanceListener){
+                        EVENTICA_HANDLER.on("instance garbage collecting test", self.counterUp)
+                    }
+                    
+                    instance_destroy(instanceListener)
+                    
+                    EVENTICA_HANDLER.__GarbageCollect()
+                    
+                    expect(EVENTICA_HANDLER.__events[$ "instance garbage collecting test"]).toBe(undefined)
+                })
+            })
+        })
     })
 });

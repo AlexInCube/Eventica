@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__EventicaListener",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__EventicaListener",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Eventica/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
