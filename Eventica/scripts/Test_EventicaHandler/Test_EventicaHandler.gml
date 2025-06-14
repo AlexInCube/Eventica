@@ -1,6 +1,7 @@
 // feather disable all
 
 suite(function() {
+    //exit
     describe("Eventica Global", function(){
         it("Handler Exists", function(){
             expect(instanceof(EVENTICA_HANDLER)).toBeEqual("EventicaHandler")
@@ -61,6 +62,20 @@ suite(function() {
 
                     EVENTICA_HANDLER.removeAllListeners()
                 })
+                
+                it("Callback Executing With Parameters", function(){
+                    var structListener = new EventicaMockStructListener()
+
+                    with (structListener){
+                        EVENTICA_HANDLER.on("emit() hello struct", self.counterUpBy)
+                    }
+
+                    EVENTICA_HANDLER.emit("emit() hello struct", 23)
+
+                    expect(structListener.counterGetValue()).toBeEqual(23)
+
+                    EVENTICA_HANDLER.removeAllListeners()
+                })
 
                 /// TODO: Wait GMTL v1.1 with timers simulation
                 /*
@@ -95,6 +110,19 @@ suite(function() {
                     EVENTICA_HANDLER.emit("emit() hello instance")
 
                     expect(instanceListener.counterGetValue()).toBeEqual(1)
+                    instance_destroy(instanceListener)
+                })
+                
+                it("Callback Executing With Parameters", function(){
+                    var instanceListener = create(0, 0, obj_eventica_mock)
+
+                    with (instanceListener){
+                        EVENTICA_HANDLER.on("emit() hello instance", self.counterUpBy)
+                    }
+
+                    EVENTICA_HANDLER.emit("emit() hello instance", 23)
+
+                    expect(instanceListener.counterGetValue()).toBeEqual(23)
                     instance_destroy(instanceListener)
                 })
 
@@ -152,7 +180,7 @@ suite(function() {
 
                     EVENTICA_HANDLER.emit("once() hello instance")
 
-                    expect(EVENTICA_HANDLER.__events[$ "once() hello struct"]).toBe(undefined)
+                    expect(EVENTICA_HANDLER.__events[$ "once() hello instance"]).toBe(undefined)
                     instance_destroy(instanceListener)
                 })
             })

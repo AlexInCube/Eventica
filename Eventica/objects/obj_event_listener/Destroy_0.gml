@@ -1,1 +1,0 @@
-EVENTICA_HANDLER.off()

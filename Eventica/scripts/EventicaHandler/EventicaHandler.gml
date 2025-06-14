@@ -20,6 +20,8 @@ function EventicaHandler() constructor {
     static emit = function(_event, _args = undefined){
         // Wrap args into executable form for script_execute_ext()
         if (!is_undefined(_args)){
+            var _args_array = []
+            
             var _i = 1; repeat(argument_count - 1)
             {
                 array_push(_args_array, argument[_i]) 
@@ -172,7 +174,15 @@ function EventicaHandler() constructor {
         }
     }
     
-    __garbage_collector_timer = time_source_create(time_source_global, 10, time_source_units_seconds, method(self, function(){ self.__GarbageCollect(); show_debug_message("Eventica Collector Tick") }), [], -1)
+    self.__garbage_collector_timer = time_source_create(
+        time_source_global, 
+        10, 
+        time_source_units_seconds, 
+        method(self, function(){
+            self.__GarbageCollect()
+        }), [], -1)
+    
+    
     time_source_start(__garbage_collector_timer)
     
     static GarbageCollectDisable = function(){
