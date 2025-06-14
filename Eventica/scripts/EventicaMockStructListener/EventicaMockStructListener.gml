@@ -13,4 +13,8 @@ function EventicaMockStructListener() constructor {
     static counterGetValue = function(){
         return __counter
     }
+    
+    static counterUpBy = function(_number){
+        __counter += _number
+    }
 }

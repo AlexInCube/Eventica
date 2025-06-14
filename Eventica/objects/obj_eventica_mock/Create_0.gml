@@ -12,3 +12,7 @@ counterReset = function(){
 counterGetValue = function(){
     return __counter
 }
+
+counterUpBy = function(_number){
+    __counter += _number
+}
