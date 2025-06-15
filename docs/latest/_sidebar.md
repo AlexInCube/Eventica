@@ -6,7 +6,6 @@
 **Concepts**
 
 - [Events](events)
-- [Namespaces & Wildcard](namespaces-and-wildcard)
 
 ---
 
@@ -19,5 +18,3 @@
 **API**
 
 - [`EventicaHandler()`](eventicahandler)
-
----

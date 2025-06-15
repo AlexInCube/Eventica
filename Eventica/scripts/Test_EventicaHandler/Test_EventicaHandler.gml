@@ -273,9 +273,42 @@ suite(function() {
                 })
             })
         })
+        
+        describe(".removeAllListeners()", function(){
+            it("Remove all listeners from all events", function(){
+                var structListener = new EventicaMockStructListener()
+
+                with (structListener){
+                    EVENTICA_HANDLER.on("removeAllListeners() hello struct", EventicaMockEmptyFunction)
+                }
+
+                EVENTICA_HANDLER.removeAllListeners()
+
+                expect(struct_names_count(EVENTICA_HANDLER.__events)).toBe(0)
+            })    
+            
+             it("Remove all listeners from certain event", function(){
+                var structListener = new EventicaMockStructListener()
+
+                with (structListener){
+                    EVENTICA_HANDLER.on("removeAllListeners() hello struct 1", EventicaMockEmptyFunction)
+                    EVENTICA_HANDLER.on("removeAllListeners() hello struct 2", EventicaMockEmptyFunction)
+                }
+
+                EVENTICA_HANDLER.removeAllListeners("removeAllListeners() hello struct 1")
+
+                expect(struct_names_count(EVENTICA_HANDLER.__events)).toBe(1)
+                expect(EVENTICA_HANDLER.__events[$ "removeAllListeners() hello struct 1"]).toBe(undefined)
+                expect(EVENTICA_HANDLER.__events[$ "removeAllListeners() hello struct 2"]).never().toBe(undefined)
+            })    
+        })
 
         describe("Internal Events", function(){
             describe(__EVENTICA_EVENT_ADD_LISTENER, function(){
+                beforeEach(function(){
+                    EVENTICA_HANDLER.option_event_add_listener = true
+                })
+                
                 afterEach(function(){
                     EVENTICA_HANDLER.removeAllListeners()
                 })
@@ -311,6 +344,10 @@ suite(function() {
             })
 
             describe(__EVENTICA_EVENT_REMOVE_LISTENER, function(){
+                beforeEach(function(){
+                    EVENTICA_HANDLER.option_event_remove_listener = true
+                })
+                
                 afterEach(function(){
                     EVENTICA_HANDLER.removeAllListeners()
                 })
@@ -344,6 +381,10 @@ suite(function() {
             })
 
             describe(__EVENTICA_EVENT_ANY, function(){
+                beforeEach(function(){
+                    EVENTICA_HANDLER.option_event_any = true
+                })
+                
                 afterEach(function(){
                     EVENTICA_HANDLER.removeAllListeners()
                 })
@@ -394,27 +435,5 @@ suite(function() {
             })
         })
          */
-
-        describe("Garbage Collecting", function(){
-            afterEach(function(){
-                EVENTICA_HANDLER.removeAllListeners()
-            })
-
-            describe("Instance Listeners", function(){
-                it("instance_destroy() and forget to .off() listener", function(){
-                    var instanceListener = create(0, 0, obj_eventica_mock)
-
-                    with (instanceListener){
-                        EVENTICA_HANDLER.on("instance garbage collecting test", self.counterUp)
-                    }
-
-                    instance_destroy(instanceListener)
-
-                    EVENTICA_HANDLER.__GarbageCollect()
-
-                    expect(EVENTICA_HANDLER.__events[$ "instance garbage collecting test"]).toBe(undefined)
-                })
-            })
-        })
     })
 });

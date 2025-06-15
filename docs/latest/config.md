@@ -25,49 +25,13 @@ To make it easier to access the event handler in the future, you can create a ma
 #macro EVENT_HANDLER obj_controller.eventHandler
 ```
 
-## Handlers Config
+## Variables in Handler
 
-`EventicaHandler()` can accept a config object
+You can directly change variables below in handler to config behavior
 
-```gml
-new EventicaHandler({
-  wildcard: "*",
-  delimiter: '.', 
-  newListener: false, 
-  removeListener: false, 
-}
-```
-
-If some properties are not provided, they will be grabbed from `__EventicaConfig`
-
-## __EventicaConfig
-
-### EVENTICA_ENABLE_DEFAULT_HANDLER {docsify-ignore}
-
-*Typical value: `true`*
-
-Eventica create default global handler, so you don't need to set it up by yourself
-
-### EVENTICA_DEFAULT_ENABLE_WILDCARD {docsify-ignore}
-
-*Typical value: `true`*
-
-Enable or disable using of * in event listeners
-
-### EVENTICA_DEFAULT_DELIMITER {docsify-ignore}
-
-*Typical value: `.`*
-
-The delimiter used to segment namespaces
-
-### EVENTICA_DEFAULT_NEW_LISTENER {docsify-ignore}
-
-*Typical value: `false`*
-
-Emit "newListener" event when someone subscribes to handler
-
-### EVENTICA_DEFAULT_REMOVE_LISTENER {docsify-ignore}
-
-*Typical value: `false`*
-
-Emit "removeListener" event when someone unsubscribes from event
+| Name                         | Datatype | Default | Purpose                                                                                                                                     |
+|------------------------------|----------|---------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| option_event_any             | boolean  | false   | Emit "__EventicaAny" event when any event is emitted (except "__EventicaAny")                                                               |
+| option_event_add_listener    | boolean  | false   | Emit "__EventicaAddListener" event when someone subscribes to handler                                                                       |
+| option_event_remove_listener | boolean  | false   | Emit "__EventicaRemoveListener" event when someone unsubscribes from event                                                                  |
+| maxListeners                 | integer  | 10      | Set to -1 for infinite count of listeners. When count of listeners for one event is exceed maxListeners, the warning are printed in console |

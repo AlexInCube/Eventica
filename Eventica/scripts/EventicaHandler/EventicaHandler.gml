@@ -1,13 +1,13 @@
 /// @desc Core of the Eventica
 function EventicaHandler() constructor {
     /// @desc Emit "__EventicaAny" event when any event is emitted (except "__EventicaAny")
-    option_event_any = true
+    option_event_any = false
     
     /// @desc Emit "__EventicaAddListener" event when someone subscribes to handler
-    option_event_add_listener = true
+    option_event_add_listener = false
     
     /// @desc Emit "__EventicaRemoveListener" event when someone unsubscribes from event
-    option_event_remove_listener = true
+    option_event_remove_listener = false
     
     /// @desc Set to -1 for infinite count of listeners. 
     /// When count of listeners for one event is exceed maxListeners, the warning are printed in console.
@@ -168,55 +168,6 @@ function EventicaHandler() constructor {
                 }
                 
                 _i--
-            }
-            
-            _i++
-        }
-    }
-    
-    self.__garbage_collector_timer = time_source_create(
-        time_source_global, 
-        10, 
-        time_source_units_seconds, 
-        method(self, function(){
-            self.__GarbageCollect()
-        }), [], -1)
-    
-    
-    time_source_start(__garbage_collector_timer)
-    
-    static GarbageCollectDisable = function(){
-        time_source_pause(__garbage_collector_timer)
-    }
-    
-    static GarbageCollectEnable = function(){
-        time_source_resume(__garbage_collector_timer)
-    }
-    
-    static __GarbageCollect = function(){
-        var _events_names = struct_get_names(__events)
-        
-        var _i = 0; repeat (array_length(_events_names)) {
-            var _listeners = __events[$ _events_names[_i]]
-            
-        	var _l = 0; repeat (array_length(_listeners)) {
-            	var _listener = _listeners[_l]
-                
-                var _auto_unsubscribe = !_listener.ScopeIsAlive()
-
-                // If listener struct or instance is not exists or repetitions is zero then delete listener
-                if (_auto_unsubscribe) {
-                    array_delete(_listeners, _l, 1)
-                    
-                    // If we don`t have any listener on event, remove event
-                    if (array_length(_listeners) == 0){
-                        struct_remove(__events, _events_names[_i])
-                    }
-                     
-                    _l--
-                }
-                
-                _l++
             }
             
             _i++
