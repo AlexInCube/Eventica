@@ -4,7 +4,7 @@ You may be confused by the fact that we already have [object events](https://man
 
 But first, the code in the object events we write is the code of the listeners.
 Second, Game Maker doesn't allow us to generate our own custom events.
-We're limited to [pre-determined events](https://manual.gamemaker.io/lts/en/The_Asset_Editors/Object_Properties/Object_Events.htm)
+We're limited to [pre-determined events](https://manual.gamemaker.io/lts/en/The_Asset_Editors/Object_Properties/Object_Events.htm).
 But why do we need to generate our own events?
 I'll try to explain it with an example.
 

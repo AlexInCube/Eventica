@@ -23,4 +23,4 @@ Please make a bug report. AlexInCube checks GitHub every day and bug fixes usual
 
 ### Can I send you donations? Are you going to start a Patreon? {docsify-ignore}
 
-You can support me on [Patreon](https://www.patreon.com/c/alexincube). I will be thrilled with your appreciation.
+You can support me on [Patreon](https://www.patreon.com/c/alexincube). I'd be happy to have your support.
