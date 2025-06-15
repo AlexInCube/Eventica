@@ -1,6 +1,6 @@
-<p align="center"><img src="../logo.png" style="display:block; margin:auto; width:300px"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/alexincube/eventinca/main/LOGO.png" style="display:block; margin:auto; width:300px"></p>
 <h1 align="center">Eventica</h1>
-<p align="center">Library for event handling in GameMaker by AlexInCube</p>
+<p align="center">Library for event handling for GameMaker by AlexInCube</p>
 <p align="center"><a href="https://github.com/AlexInCube/Eventica/releases/">Download the .yymps</a></p>
 
 &nbsp;
