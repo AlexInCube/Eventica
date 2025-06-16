@@ -1,7 +1,9 @@
 // feather disable all
 
+// Comment "exit" if you want to run tests
+exit
+
 suite(function() {
-    //exit
     describe("Eventica Global", function(){
         it("Handler Exists", function(){
             expect(instanceof(EVENTICA_HANDLER)).toBeEqual("EventicaHandler")

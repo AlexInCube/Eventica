@@ -11,6 +11,6 @@
 - ### Got questions? [Make a new issue!](https://github.com/AlexInCube/Eventica/issues/new)
 - ### [Download the .yymps](https://github.com/AlexInCube/Eventica/releases)
 - ### Read the [documentation](https://alexincube.github.io/Eventica/#/latest/)
-- ### You may also like [DIY explanation by FriendlyCosmonaut](https://www.youtube.com/watch?v=jG_fTPMQPQI), the ["Broadcast Lib"](https://github.com/JulianDicken/Broadcast)
+- ### You may also like [DIY explanation by FriendlyCosmonaut](https://www.youtube.com/watch?v=jG_fTPMQPQI) or the ["Broadcast Lib"](https://github.com/JulianDicken/Broadcast)
 
 &nbsp;

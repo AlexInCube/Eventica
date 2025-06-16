@@ -1,0 +1,1 @@
+/// @desc Exists because without declaring event, the Alarm`s is not ticking

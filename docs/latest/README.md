@@ -11,10 +11,8 @@ Eventica this is a robust and lightweight library for [event handling.](https://
 
 ## Features {docsify-ignore}
 
-- Subscription methods for any purpose (.on(), .once(), .many(), ...)
+- Subscription methods for any purpose (.on(), .once(), .many())
 - Structs & Instances as listeners
-- Auto-memory management, you don't need to unsubscribe from events manually (but you can do it with .off())
-- Prefab support
 - [Feather](https://manual.gamemaker.io/monthly/en/index.htm#t=Setting_Up_And_Version_Information%2FIDE_Preferences%2FFeather_Settings.htm) friendly.
 - [GMTL Tests](https://github.com/DAndrewBox/GM-Testing-Library)
 
