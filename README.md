@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/alexincube/Eventica/main/LOGO.png" style="display:block; margin:auto; width:300px"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/alexincube/Eventica/master/LOGO.png" style="display:block; margin:auto; width:300px"></p>
 
 <h1 align="center">Eventica 1.0.0</h1>
 
