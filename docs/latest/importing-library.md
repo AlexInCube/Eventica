@@ -1,3 +1,7 @@
+!> To use the library, it is required
+to disable ["Legacy Other Behavior"](https://manual.gamemaker.io/monthly/en/#t=GameMaker_Language%2FGML_Overview%2FInstance%20Keywords%2Fother.htm%23legacy_other_behaviour&rhsearch=legacy%20other%20behavior),
+or you will receive unexpected behavior and bugs.
+
 # Importing The Library
 
 You can find the latest version of Eventica [here](https://github.com/AlexInCube/Eventica/releases).

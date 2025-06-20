@@ -1,7 +1,7 @@
 // feather disable all
 
 // Comment "exit" if you want to run tests
-exit
+//exit
 
 suite(function() {
     describe("Eventica Global", function(){
@@ -17,7 +17,7 @@ suite(function() {
             })
 
             describe("Struct Listener", function(){
-               it("Basic Subscribe", function(){
+               it("Subscribe using \"with\"", function(){
                     var structListener = new EventicaMockStructListener()
 
                     with (structListener){
@@ -28,6 +28,27 @@ suite(function() {
 
                     expect(event).toHaveProperty("scope")
                     expect(event.scope.ref).toBeEqual(structListener)
+                })
+                
+                it("Subscribe in Struct", function(){
+                    var structListener = new EventicaMockStructListenerAndAutoSubscribe()
+
+                    var event = EVENTICA_HANDLER.__events[$ "struct auto subscribe"][0]
+
+                    expect(event).toHaveProperty("scope")
+                    expect(event.scope.ref).toBeEqual(structListener)
+                    expect(instanceof(event.scope.ref)).toBeEqual("EventicaMockStructListenerAndAutoSubscribe")
+                })
+                
+                it("Subscribe Struct within instance", function(){
+                    var instance = create(0, 0, obj_eventica_mock_store_struct_listener)
+
+                    var event = EVENTICA_HANDLER.__events[$ "struct auto subscribe"][0]
+
+                    expect(event).toHaveProperty("scope")
+                    expect(event.scope.ref).toBeEqual(instance.structListener)
+                    expect(instanceof(event.scope.ref)).toBeEqual("EventicaMockStructListenerAndAutoSubscribe")
+                    instance_destroy(instance)
                 })
             })
 
@@ -77,6 +98,21 @@ suite(function() {
                     expect(structListener.counterGetValue()).toBeEqual(23)
 
                     EVENTICA_HANDLER.removeAllListeners()
+                })
+                
+                it("Subscribe in Struct", function(){
+                    var structListener = new EventicaMockStructListenerAndAutoSubscribe()
+
+                    EVENTICA_HANDLER.emit("struct auto subscribe")
+                    expect(structListener.counterGetValue()).toBeEqual(1)
+                })
+                
+                it("Subscribe Struct within instance", function(){
+                    var instance = create(0, 0, obj_eventica_mock_store_struct_listener)
+
+                    EVENTICA_HANDLER.emit("struct auto subscribe")
+                    expect(instance.structListener.counterGetValue()).toBeEqual(1)
+                    instance_destroy(instance)
                 })
 
                 /// TODO: Wait GMTL v1.1 with timers simulation

@@ -2,6 +2,11 @@
 
 ---
 
+### My struct listeners are not correctly subscribed, how to fix it?
+!> To use the library, it is required
+to disable ["Legacy Other Behavior"](https://manual.gamemaker.io/monthly/en/#t=GameMaker_Language%2FGML_Overview%2FInstance%20Keywords%2Fother.htm%23legacy_other_behaviour&rhsearch=legacy%20other%20behavior),
+or you will receive unexpected behavior and bugs.
+
 ### What platforms does Eventica support? {docsify-ignore}
 
 Everything, because Eventica is pure GML and doesn’t do anything hacky or weird. 
